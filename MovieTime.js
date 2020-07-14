@@ -1,16 +1,25 @@
+//In this node.js I want to find the film in the theater of its timetable that I 
+//know which I can watch the movie
 const request = require('request');
 const cheerio = require('cheerio');
 
 
 getFilmIdAndName((filmId,filmName) => {
   
+  /*
+  The id is always /movie/{filmId}, but the content of these films are always
+  http://xxxxx/{filmId}/{cityId},so I have to split the filmId at first
+  */
   for(var i=0;i<filmId.length;i++){
     filmId[i] = filmId[i].split("/",3)
     filmId[i] = filmId[i][2]
   }
   //console.log(filmName)
-  //var filmFinalId = filmId[1]
-  //console.log(filmFinalId)
+
+  /*
+  Input the argument value(argv) which I want its name of movie, then push back
+  the fileId
+  */
   filmInputName = process.argv[2]
   var index
   for(var i=0;i<filmName.length;i++){
@@ -35,8 +44,10 @@ getFilmIdAndName((filmId,filmName) => {
       var $ = cheerio.load(body)
       const filmId = []
       const filmName = []
-      //searching all the element(each) in the class="filmListPA", and then grab all the 
-      //href(url) to the array "filmId"
+      /*
+      searching all the element(each) in the class="filmListPA", and then grab all the 
+      href(url) to the array "filmId"
+      */
       $('.filmListPA a').each((i,ele)=>{
         filmId.push($(ele).attr('href'))
         filmName.push($(ele).text())
@@ -50,9 +61,13 @@ function getMovieTimes(filmId,cityId,callback){
   
     var url = 'http://www.atmovies.com.tw/showtime/' +filmId+'/'+cityId+'/'
     request(url,(err,res,body)=>{
+        /*
+        date, hour, minute of today
+        */
         var d = new Date();
         var hour = d.getHours();
         var minute = d.getMinutes();
+        
         var $ = cheerio.load(body);
         
         var times = $('#filmShowtimeBlock li')
