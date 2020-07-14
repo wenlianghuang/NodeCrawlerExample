@@ -1,5 +1,6 @@
 //In this node.js I want to find the film in the theater of its timetable that I 
 //know which I can watch the movie
+//特別注意: 雖然在某些網站上雖然html已經寫好了，但內容有些就是search到，也沒辦法顯示出來QQ
 const request = require('request');
 const cheerio = require('cheerio');
 
